@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,6 +21,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
     public ProductDTO saveProduct(@RequestBody @Valid ProductDTO productDTO){
         return productService.saveProduct(productDTO);
