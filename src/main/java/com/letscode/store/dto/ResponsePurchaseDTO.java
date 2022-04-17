@@ -1,5 +1,6 @@
 package com.letscode.store.dto;
 
+import com.letscode.store.model.Product;
 import com.letscode.store.model.Purchase;
 import com.letscode.store.model.PurchaseProduct;
 import lombok.*;
@@ -19,6 +20,7 @@ public class ResponsePurchaseDTO {
     private ClientDTO clientDTO;
     private List<ProductDTO> productDTOS;
 
+
     public static ResponsePurchaseDTO convert(Purchase purchase){
         return ResponsePurchaseDTO.builder()
                 .purchaseDate(purchase.getPurchaseDate())
@@ -28,6 +30,7 @@ public class ResponsePurchaseDTO {
                 .build();
 
     }
+
     public static ResponsePurchaseDTO convert(Purchase purchase, List<ProductAndQuantityDTO> purchasedProducts){
         return ResponsePurchaseDTO.builder()
                 .purchaseDate(purchase.getPurchaseDate())
@@ -35,6 +38,7 @@ public class ResponsePurchaseDTO {
                 .clientDTO(ClientDTO.convert(purchase.getClient()))
                 .productDTOS(purchasedProducts.stream().map(ProductDTO::convert).collect(Collectors.toList()))
                 .build();
-
     }
+
+
 }

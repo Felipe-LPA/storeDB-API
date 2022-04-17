@@ -30,7 +30,7 @@ public class Purchase {
     @OneToMany(mappedBy = "purchase")
     List<PurchaseProduct> purchaseProducts;
 
-    public Purchase convert(ResponsePurchaseDTO dto){
+    public static Purchase convert(ResponsePurchaseDTO dto){
         return Purchase.builder()
                 .purchaseDate(dto.getPurchaseDate())
                 .totalPurchased(dto.getTotalPurchased())

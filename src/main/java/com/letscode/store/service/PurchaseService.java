@@ -80,6 +80,7 @@ public class PurchaseService {
 
     public Page<ResponsePurchaseDTO> listPurchase(Predicate predicate, Pageable pageable) {
 
-        return purchaseRepository.findAll(predicate, pageable).map(ResponsePurchaseDTO::convert);
+                Page<Purchase> purchasePage = purchaseRepository.findAll(predicate, pageable);
+        return purchasePage.map(ResponsePurchaseDTO::convert);
     }
 }

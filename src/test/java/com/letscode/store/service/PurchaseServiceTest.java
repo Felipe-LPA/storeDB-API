@@ -1,11 +1,11 @@
 package com.letscode.store.service;
 
 import com.letscode.store.dto.*;
-import com.letscode.store.model.Client;
-import com.letscode.store.model.Product;
-import com.letscode.store.model.Purchase;
-import com.letscode.store.model.PurchaseProduct;
+import com.letscode.store.model.*;
 import com.letscode.store.repository.PurchaseRepository;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.PredicateTemplate;
+import com.querydsl.core.types.Visitor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -25,6 +30,7 @@ public class PurchaseServiceTest {
     @InjectMocks
     private PurchaseService purchaseService;
 
+//    @Mock
     @Mock
     private PurchaseRepository purchaseRepository;
 
@@ -98,8 +104,75 @@ public class PurchaseServiceTest {
         );
     }
 
+    @Test
     public void TestListPurchase(){
+//        List<Product> products = new ArrayList<>();
+        Product product1 = Product.builder()
+                .productCode("1")
+                .price(100D)
+                .quantity(100)
+                .id(1L)
+                .build();
 
+        Product product2 = Product.builder()
+                .productCode("2")
+                .price(200D)
+                .quantity(100)
+                .id(2L)
+                .build();
+//        products.add(productDTO1);
+//        products.add(productDTO2);
+//
+
+
+        Client client = Client.builder()
+                .id(1L)
+                .name("Felipe")
+                .cpf("123")
+                .build();
+
+        List<PurchaseProduct> purchaseProducts = new ArrayList<>();
+        PurchaseProduct purchaseProduct = PurchaseProduct.builder()
+                .product(product1)
+                .purchasedProductKey(PurchasedProductKey.builder()
+                        .idPurchase(1L)
+                        .idProduct(1L)
+                        .build())
+                .purchase(Purchase.builder().build())
+                .quantityPurchased(10)
+                .build();
+
+        PurchaseProduct purchaseProduct1 = PurchaseProduct.builder()
+                .product(product2)
+                .purchasedProductKey(PurchasedProductKey.builder()
+                        .idPurchase(1L)
+                        .idProduct(2L)
+                        .build())
+                .purchase(Purchase.builder().build())
+                .quantityPurchased(10)
+                .build();
+
+        purchaseProducts.add(purchaseProduct);
+        purchaseProducts.add(purchaseProduct1);
+
+        List<Purchase> purchaseDTOS = new ArrayList<>();
+//        purchaseProducts.add(PurchaseProduct.builder().build());
+        Purchase purchase = Purchase.builder()
+                .Id(1L)
+                .purchaseDate(LocalDateTime.now())
+                .totalPurchased(10000D)
+                .client(client)
+                .purchaseProducts(purchaseProducts)
+                .build();
+        purchaseDTOS.add(purchase);
+        Page<Purchase> pagePurchase = new PageImpl<>(purchaseDTOS);
+
+
+        Pageable page = PageRequest.of(0,20);
+        Predicate predicate = QPurchase.purchase.client.cpf.contains("89247332060");
+        Mockito.when(purchaseRepository.findAll(predicate, page)).thenReturn(pagePurchase);
+        Page<ResponsePurchaseDTO> returnedResponsePurchasedDTO = purchaseService.listPurchase(predicate, page);
+        Assertions.assertEquals(1,returnedResponsePurchasedDTO.getSize());
     }
 
 }

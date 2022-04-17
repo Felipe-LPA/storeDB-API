@@ -4,11 +4,13 @@ import com.letscode.store.dto.ClientDTO;
 import com.letscode.store.exception.AlreadyExistException;
 import com.letscode.store.exception.NotFoundException;
 import com.letscode.store.model.Client;
+import com.letscode.store.model.Product;
 import com.letscode.store.repository.ClientRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
