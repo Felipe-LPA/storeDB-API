@@ -6,6 +6,7 @@ import com.letscode.store.exception.NotFoundException;
 import com.letscode.store.model.User;
 import com.letscode.store.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,11 +19,13 @@ public class UserService {
 
     private final AuthorityService authorityService;
 
+    private final PasswordEncoder passwordEncoder;
 
     public void saveUser(UserDTO userDTO) {
         Optional<User> user = userRepository.findByUserName(userDTO.getUsername());
         if(user.isPresent()) throw new AlreadyExistException("User Already Exist");
 
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         final User userDB = userRepository.save(User.convert(userDTO));
 
         userDTO.getRoles().forEach(role -> authorityService.saveAuthorities(userDB, role));

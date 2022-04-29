@@ -1,6 +1,7 @@
 package com.letscode.store.model;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Authority {
+public class Authority implements GrantedAuthority {
 
     @EmbeddedId
     private AuthorityKey authorityKey;
@@ -20,4 +21,8 @@ public class Authority {
     private User user;
 
 
+    @Override
+    public String getAuthority() {
+        return authorityKey.getAuthority();
+    }
 }
