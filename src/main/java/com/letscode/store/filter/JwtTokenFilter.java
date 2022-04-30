@@ -38,7 +38,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private void authenticate(String token) {
         String user = tokenService.getTokenUser(token);
-        Optional<User> userDBOptional = userRepository.findById(user);
+        Optional<User> userDBOptional = userRepository.findByUserName(user);
         if (userDBOptional.isPresent()){
             User userDB = userDBOptional.get();
             UsernamePasswordAuthenticationToken userToken =
@@ -49,7 +49,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String getToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if (token == null || token.isEmpty() || token.startsWith("Bearer")){
+        if (token == null || token.isEmpty() || !token.startsWith("Bearer")){
             return null;
         }
 

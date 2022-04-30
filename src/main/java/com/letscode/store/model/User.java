@@ -3,10 +3,7 @@ package com.letscode.store.model;
 import com.letscode.store.dto.UserDTO;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class User {
     @Column(name = "enabled")
     private Boolean enable;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
 
     public static User convert(UserDTO userDTO) {
